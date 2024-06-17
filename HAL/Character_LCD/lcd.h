@@ -28,8 +28,8 @@
 #if defined  (PARALLEL_8_BITS_FULL_PORT)
 
 /*Select the pins where you connected the lcd */
-#define RS D4
-#define E  D5
+#define RS D0
+#define E  D1
 #define DATA_PORT PORTC_ID
 
 #elif defined (PARALLEL_8_BITS_RANDOM)
