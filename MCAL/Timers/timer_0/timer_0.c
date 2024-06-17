@@ -7,10 +7,9 @@
  *
  * @details
  * This source file contains the implementations of functions that operate on Timer 0,
- * a hardware timer in the AVR microcontroller. Timer 0 is used for various timing and
+ * a hardware timer in the AVR Microcontroller. Timer 0 is used for various timing and
  * counting operations. This module provides functionalities to initialize Timer 0,
  * set its mode of operation, configure interrupts, and control its behavior.
- *
  */
 
 #include "timer_0.h"
@@ -18,13 +17,14 @@
 #include "../../../common_macros.h"
 #include <avr/interrupt.h>
 #include "../../../HAL/Character_LCD/lcd.h"
+#include "avr/delay.h"
 
 static uint8 selectedClk;
 Timer0Callback overflow_callback = NULL_PTR;
 Timer0Callback compare_match_callback = NULL_PTR;
 
 /**
- * @brief
+ * @briefs
  *
  * @param clk
  */
@@ -44,12 +44,10 @@ static void OC0_control(timer0_OC0_Control OC0) {
 }
 
 void timer0_init(timer0_Config *config) {
-	LCD_displayString("INIT");
 
 	switch (config->mode) {
 	/*initialize timer 0 in normal mode and disconnect OC0 by default*/
 	case TIMER0_MODE_NORMAL:
-		LCD_displayString("Normal");
 		//TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00
 		// TCCR0 -> 1 	| 0 	| 0 	| 0 	| 0 	| CS02 | CS01 | CS00
 		TCCR0 |= (1 << FOC0);
@@ -91,16 +89,19 @@ void timer0_start(void) {
 }
 void timer0_setStart(uint8 startValue) {
 	TCNT0 = startValue;
+	_delay_ms(1000);
+	TCNT0 = startValue;
 }
 uint8 timer0_getTicks(void) {
+	uint8 reg = TCNT0;
 	return TCNT0;
 }
 void timer0_set_compare_value(uint8 compValue) {
 	OCR0 = compValue;
+
 }
 
 void timer0_enable_interrupt(timer0_interrupt_type interrupt) {
-	LCD_displayString("enable I");
 
 	switch (interrupt) {
 	case TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH:
@@ -150,4 +151,15 @@ void timer0_set_ISR_callback(timer0_interrupt_type interrupt,
 		break;
 	}
 }
+ISR(TIMER0_COMP_vect) {
+	if (compare_match_callback != NULL_PTR) {
+		compare_match_callback();
+	}
 
+}
+ISR(TIMER0_OVF_vect) {
+	if (overflow_callback != NULL_PTR) {
+		overflow_callback();
+	}
+
+}

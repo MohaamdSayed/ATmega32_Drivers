@@ -16,6 +16,16 @@
 #ifndef MYDRIVERS_MCAL_TIMERS_TIMER0_H_
 #define MYDRIVERS_MCAL_TIMERS_TIMER0_H_
 
+/**
+ * @brief THE REGISTERRS USED BY TIMER0 and there address
+ *
+ */
+
+//#define TCCR0 (*(volatile uint8 *)((0x33) + 0x20))
+//#define TCNT0 (*(volatile uint8 *)((0x32) + 0x20))
+//#define OCR0 (*(volatile uint8 *)((0x3C) + 0x20))
+//#define TIMSK (*(volatile uint8 *)((0x39) + 0x20))
+//#define TIFR (*(volatile uint8 *)((0x38) + 0x20))
 #include "../../../std_types.h"
 /*
  REGISTERS:
@@ -183,18 +193,13 @@ typedef struct {
 typedef void (*Timer0Callback)(void);
 
 void timer0_init(timer0_Config*);
-//static void set_Clock(timer0_CLK clk);
-//static void OC0_control(timer0_OC0_Control OC0);
 void timer0_stop(void);
 void timer0_start(void);
 void timer0_setStart(uint8);
 uint8 timer0_getTicks(void);
-
 void timer0_set_compare_value(uint8 compValue);
-
 void timer0_enable_interrupt(timer0_interrupt_type);
 void timer0_disable_interrupt(timer0_interrupt_type interrupt);
-
 uint8 timer0_get_interrupt_flag(timer0_interrupt_type);
 void timer0_set_ISR_callback(timer0_interrupt_type, Timer0Callback);
 
