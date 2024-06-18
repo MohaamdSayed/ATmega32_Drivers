@@ -10,8 +10,8 @@
  *
  *******************************************************************************/
 
-#ifndef GPIO_H_
-#define GPIO_H_
+#ifndef ATMEGA32_DRIVERS_GPIO_H_
+#define ATMEGA32_DRIVERS_GPIO_H_
 
 #include "..\..\std_types.h"
 
@@ -75,11 +75,15 @@
  *                               Types Declaration                             *
  *******************************************************************************/
 typedef enum {
-	PIN_INPUT, PIN_OUTPUT
+    PIN_INPUT, PIN_OUTPUT
 } GPIO_PinDirectionType;
+typedef enum {
+    LOW, HIGH
+} GPIO_LogicType;
+
 
 typedef enum {
-	PORT_INPUT, PORT_OUTPUT = 0xFF
+    PORT_INPUT, PORT_OUTPUT = 0xFF
 } GPIO_PortDirectionType;
 
 /*******************************************************************************
@@ -95,11 +99,11 @@ void GPIO_setupPinDirection(uint8 pin_num, GPIO_PinDirectionType direction);
 
 /*
  * Description :
- * Write the value Logic High or Logic Low on the required pin.
+ * Write the logic_level Logic High or Logic Low on the required pin.
  * If the input port number or pin number are not correct, The function will not handle the request.
  * If the pin is input, this function will enable/disable the internal pull-up resistor.
  */
-void GPIO_writePin(uint8 pin_num, uint8 value);
+void GPIO_writePin(uint8 pin_num, GPIO_LogicType logic_level);
 
 /*
  * Description :
@@ -134,5 +138,7 @@ void GPIO_writePort(uint8 port_num, uint8 value);
 uint8 GPIO_readPort(uint8 port_num);
 
 void GPIO_enablePullUp(uint8 pin_num);
+
 void GPIO_disablePullUp(uint8 pin_num);
-#endif /* GPIO_H_ */
+
+#endif /* ATMEGA32_DRIVERS_GPIO_H_ */

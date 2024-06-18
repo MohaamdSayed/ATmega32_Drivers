@@ -13,8 +13,8 @@
  * set its mode of operation, configure interrupts, and control its behavior.
  */
 
-#ifndef MYDRIVERS_MCAL_TIMERS_TIMER0_H_
-#define MYDRIVERS_MCAL_TIMERS_TIMER0_H_
+#ifndef ATMEGA32_DRIVERS_TIMER0_H_
+#define ATMEGA32_DRIVERS_TIMER0_H_
 
 #include "../../../std_types.h"
 
@@ -216,4 +216,4 @@ void TIMER0_disable_interrupt(TIMER0_interrupt_type interrupt);
 uint8 TIMER0_get_interrupt_flag(TIMER0_interrupt_type);
 void TIMER0_set_ISR_callback(TIMER0_interrupt_type, Timer0Callback);
 
-#endif /* MYDRIVERS_MCAL_TIMERS_TIMER0_H_ */
+#endif /* ATMEGA32_DRIVERS_TIMER0_H_ */

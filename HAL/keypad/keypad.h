@@ -9,8 +9,8 @@
  * Author: Mohamed Sayed
  *
  *******************************************************************************/
-#ifndef MYDRIVERS_KEYBAD_H_
-#define MYDRIVERS_KEYBAD_H_
+#ifndef ATMEGA32_DRIVERS_KEYBAD_H_
+#define ATMEGA32_DRIVERS_KEYBAD_H_
 #include "..\..\std_types.h"
 #include "..\..\common_macros.h"
 #include "..\..\MCAL\gpio\gpio.h"
@@ -35,7 +35,7 @@
 #define ROWS { ROW0, ROW1, ROW2, ROW3 }
 #define COLS { COL0, COL1, COL2, COL3 }
 
-#endif /* MYDRIVERS_KEYBAD_H_ */
+#endif /* ATMEGA32_DRIVERS_KEYBAD_H_ */
 
 #define CHARARRAY { 7, 8, 9, '/', 4, 5, 6, '*', 1, 2, 3, '-', 'c', 0,'=', '+'}
 

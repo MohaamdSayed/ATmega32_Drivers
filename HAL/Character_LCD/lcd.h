@@ -10,8 +10,8 @@
  *
  *******************************************************************************/
 
-#ifndef MYDRIVERS_LCD_H_
-#define MYDRIVERS_LCD_H_
+#ifndef ATMEGA32_DRIVERS_LCD_H_
+#define ATMEGA32_DRIVERS_LCD_H_
 #include "..\..\std_types.h"
 #include "..\..\common_macros.h"
 #include "..\..\MCAL\gpio\gpio.h"
@@ -116,4 +116,4 @@ void LCD_clearScreen(void);
 void LCD_showCursor(void);
 void LCD_dispalyOn();
 void LCD_dispalyOff();
-#endif /* MYDRIVERS_LCD_H_ */
+#endif /* ATMEGA32_DRIVERS_LCD_H_ */
