@@ -8,13 +8,15 @@
  * @details
  * This header file contains the definition of a structure and the prototypes
  * for functions that operate on this structure to be used by the Timer 0 driver module.
- * Timer 0 is a hardware timer in the AVR microcontroller used for various timing and
+ * Timer 0 is a hardware timer in the AVR Microcontroller used for various timing and
  * counting operations. This module provides functionalities to initialize Timer 0,
  * set its mode of operation, configure interrupts, and control its behavior.
  */
 
 #ifndef MYDRIVERS_MCAL_TIMERS_TIMER0_H_
 #define MYDRIVERS_MCAL_TIMERS_TIMER0_H_
+
+#include "../../../std_types.h"
 
 /**
  * @brief THE REGISTERRS USED BY TIMER0 and there address
@@ -26,8 +28,10 @@
 //#define OCR0 (*(volatile uint8 *)((0x3C) + 0x20))
 //#define TIMSK (*(volatile uint8 *)((0x39) + 0x20))
 //#define TIFR (*(volatile uint8 *)((0x38) + 0x20))
-#include "../../../std_types.h"
-/*
+/**
+ @brief Here you can find all the the information related to the Timer0
+ hardware found in the official data sheet.
+
  REGISTERS:
  TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00
  TCNT0 -> 8-bit value of the timer/counter reading
@@ -142,7 +146,7 @@ typedef enum {
 	TIMER0_MODE_PWM_PHASE_CORRECT,/**< TIMER0_MODE_PWM_PHASE_CORRECT */
 	TIMER0_MODE_CTC, /**< TIMER0_MODE_CTC */
 	TIMER0_MODE_FAST_PWM, /**< TIMER0_MODE_FAST_PWM */
-} timer0_mode;
+} TIMER0_MODE;
 
 /**
  * @brief this enum hold the available clock settings available for timer 0
@@ -157,50 +161,59 @@ typedef enum {
 	TIMER0_CLK_SYSTEM_1024, /**< TIMER0_CLK_SYSTEM_1024 */
 	TIMER0_CLK_SYSTEM_EXTERNAL_FALING,/**< TIMER0_CLK_SYSTEM_EXTERNAL_FALING */
 	TIMER0_CLK_SYSTEM_EXTERNAL_RISING, /**< TIMER0_CLK_SYSTEM_EXTERNAL_RISING */
-} timer0_CLK;
+} TIMER0_CLK;
 
+/**
+ * @brief
+ *
+ */
 typedef enum {
-	TIMER0_NORMAL_CTC_OC0_DISCONNECTED = 0,
-	TIMER0_NORMAL_CTC_OC0_TOGGLE = 1,
-	TIMER0_NORMAL_CTC_OC0_CLEAR = 2,
-	TIMER0_NORMAL_CTC_OC0_SET = 3,
+	TIMER0_OC0_DISCONNECTED = 0, /**< TIMER0_OC0_DISCONNECTED */
+	TIMER0_OC0_TOGGLE = 1, /**< TIMER0_OC0_TOGGLE */
+	TIMER0_OC0_CLEAR = 2, /**< TIMER0_OC0_CLEAR */
+	TIMER0_OC0_SET = 3, /**< TIMER0_OC0_SET */
 
-	TIMER0_FAST_PWM_OC0_DISCONNECTED = 0,
-	TIMER0_FAST_PWM_OC0_CLEAR = 2,
-	TIMER0_FAST_PWM_OC0_SET = 3,
+} TIMER0_OC0_Control;
 
-	TIMER0_PWM_PHASE_CORRECT_OC0_DISCONNECTED = 0,
-	TIMER0_PWM_PHASE_CORRECT_OC0_CLEAR = 2,
-	TIMER0_PWM_PHASE_CORRECT_OC0_SET = 3,
-
-} timer0_OC0_Control;
-
+/**
+ * @brief this enum holds the available interrupt enable types.
+ *
+ */
 typedef enum {
 	TIMER0_INTERRUPT_OVERFLOW, TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH
 
-} timer0_interrupt_type;
+} TIMER0_interrupt_type;
 
 /**
  * @brief Represent The Settings used to initialize the Timer 0
  *
  */
 typedef struct {
-	timer0_mode mode;
-	timer0_CLK clock;
-	timer0_OC0_Control OC0;
-} timer0_Config;
+	TIMER0_MODE mode;
+	TIMER0_CLK clock;
+	TIMER0_OC0_Control OC0;
+} TIMER0_Config;
 
+/**
+ * @brief used to define the type of the callback function
+ *
+ */
 typedef void (*Timer0Callback)(void);
 
-void timer0_init(timer0_Config*);
-void timer0_stop(void);
-void timer0_start(void);
-void timer0_setStart(uint8);
-uint8 timer0_getTicks(void);
-void timer0_set_compare_value(uint8 compValue);
-void timer0_enable_interrupt(timer0_interrupt_type);
-void timer0_disable_interrupt(timer0_interrupt_type interrupt);
-uint8 timer0_get_interrupt_flag(timer0_interrupt_type);
-void timer0_set_ISR_callback(timer0_interrupt_type, Timer0Callback);
+/**
+ * @brief function prototypes for
+ *
+ */
+
+void TIMER0_init(TIMER0_Config*);
+void TIMER0_stop(void);
+void TIMER0_start(void);
+void TIMER0_setStart(uint8);
+uint8 TIMER0_getTicks(void);
+void TIMER0_set_compare_value(uint8 compValue);
+void TIMER0_enable_interrupt(TIMER0_interrupt_type);
+void TIMER0_disable_interrupt(TIMER0_interrupt_type interrupt);
+uint8 TIMER0_get_interrupt_flag(TIMER0_interrupt_type);
+void TIMER0_set_ISR_callback(TIMER0_interrupt_type, Timer0Callback);
 
 #endif /* MYDRIVERS_MCAL_TIMERS_TIMER0_H_ */

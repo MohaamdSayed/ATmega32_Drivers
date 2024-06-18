@@ -1,22 +1,29 @@
-/******************************************************************************
- *
- * Module: Common - Platform Types Abstraction
- *
- * File Name: std_types.h
- *
- * Description: types for AVR
- *
- * Author: Mohamed Sayed
- *
- *******************************************************************************/
+
+/**
+ * @file std_types.h
+ * @brief Header file for Timer 0 driver module.
+ * @version 1.0
+ * @date 2024-06-16
+ * @author Mohamed Sayed
+ * @details
+ * This header file contains the definition of all common types
+ * used by the rest of the drivers.
+ */
 
 #ifndef STD_TYPES_H_
 #define STD_TYPES_H_
 
-/* Boolean Data Type */
+/**
+ *  @brief Boolean Data Type
+ */
 typedef unsigned char boolean;
 
-/* Boolean Values */
+
+/**
+ * @brief  Boolean Values
+ *
+ */
+
 #ifndef FALSE
 #define FALSE       (0u)
 #endif
@@ -24,11 +31,27 @@ typedef unsigned char boolean;
 #define TRUE        (1u)
 #endif
 
+
+/**
+ * @brief LOGIC Operators
+ *
+ */
 #define LOGIC_HIGH        (1u)
 #define LOGIC_LOW         (0u)
 
+
+/**
+ * @brief NULL Pointer Macro
+ *
+ */
 #define NULL_PTR    ((void*)0)
 
+
+
+
+/**
+ * @brief type definition for most used types in avr
+ */
 typedef unsigned char uint8; /*           0 .. 255              */
 typedef signed char sint8; /*        -128 .. +127             */
 typedef unsigned short uint16; /*           0 .. 65535            */
