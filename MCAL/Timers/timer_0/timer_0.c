@@ -29,28 +29,27 @@ Timer0Callback compare_match_callback = NULL_PTR;
  *
  * @param clk
  */
-static void set_Clock(TIMER0_CLK clk) {
+void set_Clock(TIMER0_CLK clk) {
     selectedClk = clk;
-    TCCR0 = (TCCR0 & 0b11111000) | clk;
+//    TCCR0 = (TCCR0 & 0b11111000) | clk;
 }
 
 /**
  * @brief this function control the behavior of OC0 pin
  * @param OC0
  */
-static void OC0_control(TIMER0_OC0_Control OC0) {
+void OC0_control(TIMER0_OC0_Control OC0) {
     TCCR0 = (TCCR0 & 0b11001111) | (OC0 << 4);
 }
 
 /**
- * @brief This function is used to initialize the timer
+ * @brief This function is used to control the mode of the timer
  *
- * @param config  TIMER0_Config structure containing the configuration data for the timer
+ * @param mode  TIMER0_MODE enum containing the available modes  for the timer
  */
 
-void TIMER0_init(TIMER0_Config *config) {
-
-    switch (config->mode) {
+void SetMode(TIMER0_MODE mode) {
+    switch (mode) {
         /**initialize timer 0 in normal mode and disconnect OC0 by default*/
         case TIMER0_MODE_NORMAL:
             /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
@@ -76,19 +75,51 @@ void TIMER0_init(TIMER0_Config *config) {
         default:
             break;
     }
-
-    set_Clock(config->clock);
-    OC0_control(config->OC0);
     TIFR |= 3; /** Clear interrupt Flags */
-
 }
+
+//
+//static void TIMER0_init(TIMER0_Config *config) {
+//
+//    switch (config->mode) {
+//        /**initialize timer 0 in normal mode and disconnect OC0 by default*/
+//        case TIMER0_MODE_NORMAL:
+//            /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
+//            /** TCCR0 -> 1 	  | 0 	  | 0 	  | 0 	  | 0 	  | CS02 | CS01 | CS00 */
+//            TCCR0 |= (1 << FOC0);
+//            break;
+//        case TIMER0_MODE_CTC:
+//            /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
+//            /** TCCR0 -> 1 	  | 0 	  | 0 	  | 0 	  | 1 	  | CS02 | CS01 | CS00 */
+//            TCCR0 = 0b1000100;
+//
+//            break;
+//        case TIMER0_MODE_FAST_PWM:
+//            /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
+//            /** TCCR0 -> 0 	  | 1 	  | 0 	  |  0	  | 1 	  | CS02 | CS01 | CS00 */
+//            TCCR0 = 0b01001000;
+//            break;
+//        case TIMER0_MODE_PWM_PHASE_CORRECT:
+//            /**TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
+//            /** TCCR0 -> 0 	 | 1 	 | 0 	 |  0	 | 0 	 | CS02 | CS01 | CS00 */
+//            TCCR0 = 0b01000000;
+//            break;
+//        default:
+//            break;
+//    }
+//
+//    set_Clock(config->clock);
+//    OC0_control(config->OC0);
+//    TIFR |= 3; /** Clear interrupt Flags */
+//}
 
 /**
  * @brief this function is used to stop the timer from counting without changing any settings.
  *
  */
 void TIMER0_stop(void) {
-    set_Clock(TIMER0_CLK_NO_CLOCK);
+    TCCR0 = (TCCR0 & 0b11111000) | TIMER0_CLK_NO_CLOCK;
+//    set_Clock(TIMER0_CLK_NO_CLOCK);
 }
 
 /**
@@ -96,7 +127,8 @@ void TIMER0_stop(void) {
  *
  */
 void TIMER0_start(void) {
-    set_Clock(selectedClk);
+    TCCR0 = (TCCR0 & 0b11111000) | selectedClk;
+//    set_Clock(selectedClk);
 }
 
 /**
@@ -132,7 +164,7 @@ void TIMER0_set_compare_value(uint8 compValue) {
  *
  * @param interrupt enum holds the two different interrupt types
  */
-void TIMER0_enable_interrupt(TIMER0_interrupt_type interrupt) {
+static void TIMER0_enable_interrupt(TIMER0_interrupt_type interrupt) {
 
     switch (interrupt) {
         case TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH:
@@ -147,12 +179,20 @@ void TIMER0_enable_interrupt(TIMER0_interrupt_type interrupt) {
     }
 }
 
+void enableCTCInterrupt() {
+    TIMER0_enable_interrupt(TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH);
+}
+
+void enableOverFlowInterrupt() {
+    TIMER0_enable_interrupt(TIMER0_INTERRUPT_OVERFLOW);
+}
+
 /**
  * @brief this function modify TIMSK to disable the interrupt for the timer0.
  *
  * @param interrupt enum holds the two different interrupt types
  */
-void TIMER0_disable_interrupt(TIMER0_interrupt_type interrupt) {
+static void TIMER0_disable_interrupt(TIMER0_interrupt_type interrupt) {
     switch (interrupt) {
         case TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH:
             //TIMSK -> R | R | R | R | R | R | OCIE0 | TOIE0
@@ -167,13 +207,22 @@ void TIMER0_disable_interrupt(TIMER0_interrupt_type interrupt) {
     }
 }
 
+void disableCTCInterrupt() {
+    TIMER0_disable_interrupt(TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH);
+}
+
+void disableOverFlowInterrupt() {
+    TIMER0_disable_interrupt(TIMER0_INTERRUPT_OVERFLOW);
+}
+
+
 /**
  * @brief this function return the current status of the interrupt flag
  *
  * @param interrupt enum holds the two different interrupt types
  * @return
  */
-uint8 TIMER0_get_interrupt_flag(TIMER0_interrupt_type interrupt) {
+static uint8 TIMER0_get_interrupt_flag(TIMER0_interrupt_type interrupt) {
     switch (interrupt) {
         case TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH:
             /**TIFR  -> R | R | R | R | R | R | OCF0  | TOV0*/
@@ -184,14 +233,23 @@ uint8 TIMER0_get_interrupt_flag(TIMER0_interrupt_type interrupt) {
     return 0;
 }
 
+uint8 getOverFlowFlag(void) {
+    return TIMER0_get_interrupt_flag(TIMER0_INTERRUPT_OVERFLOW);
+}
+
+uint8 getCTCFlag(void) {
+    return TIMER0_get_interrupt_flag(TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH);
+}
+
+
 /**
  * @brief this function take a callback function from the user and save it's memory location to be used by the ISR later.
  *
  * @param interrupt
  * @param callback
  */
-void TIMER0_set_ISR_callback(TIMER0_interrupt_type interrupt,
-                             Timer0Callback callback) {
+static void TIMER0_set_ISR_callback(TIMER0_interrupt_type interrupt,
+                                    Timer0Callback callback) {
     switch (interrupt) {
         case TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH:
             compare_match_callback = callback;
@@ -201,6 +259,15 @@ void TIMER0_set_ISR_callback(TIMER0_interrupt_type interrupt,
             break;
     }
 }
+
+void setOverFlowCallback(Timer0Callback callback) {
+    TIMER0_set_ISR_callback(TIMER0_INTERRUPT_OVERFLOW, callback);
+}
+
+void setCTCCallback(Timer0Callback callback) {
+    TIMER0_set_ISR_callback(TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH, callback);
+}
+
 
 /**
  * @brief call the ISR function with the given Callback.
