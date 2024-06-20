@@ -23,11 +23,11 @@
  *
  */
 
-//#define TCCR0 (*(volatile uint8 *)((0x33) + 0x20))
-//#define TCNT0 (*(volatile uint8 *)((0x32) + 0x20))
-//#define OCR0 (*(volatile uint8 *)((0x3C) + 0x20))
-//#define TIMSK (*(volatile uint8 *)((0x39) + 0x20))
-//#define TIFR (*(volatile uint8 *)((0x38) + 0x20))
+#define TCCR0 (*(volatile uint8 *)((0x33) + 0x20))
+#define TCNT0 (*(volatile uint8 *)((0x32) + 0x20))
+#define OCR0 (*(volatile uint8 *)((0x3C) + 0x20))
+#define TIMSK (*(volatile uint8 *)((0x39) + 0x20))
+#define TIFR (*(volatile uint8 *)((0x38) + 0x20))
 /**
  @brief Here you can find all the the information related to the Timer0
  hardware found in the official data sheet.

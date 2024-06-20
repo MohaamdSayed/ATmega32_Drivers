@@ -13,11 +13,7 @@
  */
 
 #include "timer_0.h"
-#include "avr/io.h"
-#include "../../../common_macros.h"
-#include <avr/interrupt.h>
-#include "../../../HAL/Character_LCD/lcd.h"
-//#include "avr/delay.h"
+
 
 static uint8 selectedClk;
 Timer0Callback overflow_callback = NULL_PTR;
@@ -54,7 +50,7 @@ void SetMode(TIMER0_MODE mode) {
         case TIMER0_MODE_NORMAL:
             /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
             /** TCCR0 -> 1 	  | 0 	  | 0 	  | 0 	  | 0 	  | CS02 | CS01 | CS00 */
-            TCCR0 |= (1 << FOC0);
+            TCCR0 |= (1 << 7);
             break;
         case TIMER0_MODE_CTC:
             /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
@@ -273,19 +269,36 @@ void setCTCCallback(Timer0Callback callback) {
  * @brief call the ISR function with the given Callback.
  *
  */
-ISR(TIMER0_COMP_vect) {
+
+#define TIMER0_COMP_ISR __vector_10
+
+void TIMER0_COMP_ISR(void)__attribute__((signal, used, externally_visible));
+
+void TIMER0_COMP_ISR(void) {
     if (compare_match_callback != NULL_PTR) {
         compare_match_callback();
     }
 
+
 }
+
+
+
+
+
+
 /**
  * @brief call the ISR function with the given Callback.
  *
  */
-ISR(TIMER0_OVF_vect) {
+#define TIMER0_OVF_ISR __vector_11
+
+void TIMER0_OVF_ISR(void)__attribute__((signal, used, externally_visible));
+
+void TIMER0_OVF_ISR(void) {
     if (overflow_callback != NULL_PTR) {
         overflow_callback();
     }
-
 }
+
+
