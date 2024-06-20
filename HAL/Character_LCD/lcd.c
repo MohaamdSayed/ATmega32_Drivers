@@ -1,20 +1,29 @@
-/******************************************************************************
- *
- * Module: HAL/LCD
- *
- * File Name: lcd.c
- *
- * Description: Source File for LCD driver
- *
- * Author: Mohamed Sayed
- *
- *******************************************************************************/
+/**
+ * @file lcd.c
+ * @brief Source File for LCD driver
+ * @details This file contains the implementation of the functions for the LCD driver.
+ * @version 1.0
+ * @date 2024-06-20
+ * @author Mohamed Sayed
+*/
+
 #include "lcd.h"
 #include "../../delay.h"
 #include <stdlib.h>
 
+/**
+ * @defgroup Parallel8BitsFullPort Parallel 8 Bits Full Port Mode
+ * @brief Functions and configurations for the parallel 8 bits full port mode
+ * @{
+ */
+
 #if defined  (PARALLEL_8_BITS_FULL_PORT)
 
+/**
+ * @brief Send a command to the LCD in parallel 8 bits full port mode.
+ *
+ * @param command The command to be sent to the LCD.
+ */
 static void send(uint8 command) {
     delay_ms(1);
     GPIO_writePin(E, LOGIC_HIGH);
@@ -25,7 +34,9 @@ static void send(uint8 command) {
     delay_ms(1);
 }
 
-
+/**
+ * @brief Initialize the LCD in parallel 8 bits full port mode.
+ */
 void LCD_init(void) {
     GPIO_setupPinDirection(RS, PIN_OUTPUT);
     GPIO_setupPinDirection(E, PIN_OUTPUT);
@@ -36,11 +47,23 @@ void LCD_init(void) {
     LCD_sendCommand(LCD_COMMAND_CLEAR);
 }
 
+#endif
+/** @} */ // End of Parallel8BitsFullPort group
 
-#elif defined (PARALLEL_8_BITS_RANDOM)
+/**
+ * @defgroup Parallel8BitsRandom Parallel 8 Bits Random Mode
+ * @brief Functions and configurations for the parallel 8 bits random mode
+ * @{
+ */
 
+#if defined (PARALLEL_8_BITS_RANDOM)
+
+/**
+ * @brief Send a command to the LCD in parallel 8 bits random mode.
+ *
+ * @param command The command to be sent to the LCD.
+ */
 static void send(uint8 command) {
-
     delay_ms(1);
     GPIO_writePin(E, LOGIC_HIGH);
     delay_ms(1);
@@ -59,6 +82,9 @@ static void send(uint8 command) {
     delay_ms(1);
 }
 
+/**
+ * @brief Initialize the LCD in parallel 8 bits random mode.
+ */
 void LCD_init(void) {
     GPIO_setupPinDirection(RS, PIN_OUTPUT);
     GPIO_setupPinDirection(E, PIN_OUTPUT);
@@ -78,10 +104,23 @@ void LCD_init(void) {
     LCD_sendCommand(LCD_COMMAND_CLEAR);
 }
 
-#elif defined (PARALLEL_4_BITS)
+#endif
+/** @} */ // End of Parallel8BitsRandom group
 
+/**
+ * @defgroup Parallel4Bits Parallel 4 Bits Mode
+ * @brief Functions and configurations for the parallel 4 bits mode
+ * @{
+ */
+
+#if defined (PARALLEL_4_BITS)
+
+/**
+ * @brief Send a command to the LCD in parallel 4 bits mode.
+ *
+ * @param command The command to be sent to the LCD.
+ */
 static void send(uint8 command) {
-
     delay_ms(1);
     GPIO_writePin(E, LOGIC_HIGH);
     delay_ms(1);
@@ -104,9 +143,11 @@ static void send(uint8 command) {
     delay_ms(1);
     GPIO_writePin(E, LOGIC_LOW);
     delay_ms(1);
-
 }
 
+/**
+ * @brief Initialize the LCD in parallel 4 bits mode.
+ */
 void LCD_init(void) {
     GPIO_setupPinDirection(RS, PIN_OUTPUT);
     GPIO_setupPinDirection(E, PIN_OUTPUT);
@@ -122,21 +163,45 @@ void LCD_init(void) {
     LCD_sendCommand(LCD_COMMAND_CLEAR); /* clear LCD at the beginning */
 }
 
-#elif defined (I2C)
-
-
 #endif
+/** @} */ // End of Parallel4Bits group
 
-void LCD_sendCommand(uint8 command) {
+/**
+ * @defgroup I2C I2C Mode
+ * @brief Functions and configurations for the I2C mode
+ * @{
+ */
+
+#if defined (I2C)
+/* I2C specific implementations can be added here */
+#endif
+/** @} */ // End of I2C group
+
+/**
+ * @brief Send a command to the LCD.
+ *
+ * @param command The command to be sent to the LCD.
+ */
+void LCD_sendCommand(LCD_Commands command) {
     GPIO_writePin(RS, LOGIC_LOW);
     send(command);
 }
 
-void LCD_displayCharacter(uint8 char_data) {
+/**
+ * @brief Display a character on the LCD.
+ *
+ * @param character The character to be displayed.
+ */
+void LCD_displayCharacter(uint8 character) {
     GPIO_writePin(RS, LOGIC_HIGH);
-    send(char_data);
+    send(character);
 }
 
+/**
+ * @brief Display a string on the LCD.
+ *
+ * @param string Pointer to the string to be displayed.
+ */
 void LCD_displayString(char *string) {
     uint8 index = 0;
     while (string[index]) {
@@ -145,6 +210,12 @@ void LCD_displayString(char *string) {
     }
 }
 
+/**
+ * @brief Move the cursor to a specific position.
+ *
+ * @param row The row number (0 or 1).
+ * @param col The column number.
+ */
 void LCD_moveCursor(uint8 row, uint8 col) {
     uint8 lcd_memory_address;
 
@@ -167,12 +238,23 @@ void LCD_moveCursor(uint8 row, uint8 col) {
     LCD_sendCommand(lcd_memory_address | LCD_COMMAND_SET_CURSOR_LOCATION);
 }
 
+/**
+ * @brief Convert an integer to a string and display it on the LCD.
+ *
+ * @param data The integer to be displayed.
+ */
 void LCD_intgerToString(uint64 data) {
     char buffer[10];
     ltoa(data, buffer, 10);
     LCD_displayString(buffer);
 }
 
+/**
+ * @brief Convert a float to a string and display it on the LCD.
+ *
+ * @param data The float to be displayed.
+ * @param percision The number of decimal places to display.
+ */
 void LCD_floatToString(float data, uint8 percision) {
     uint64 left, right, val;
     uint8 i = 1;
@@ -185,21 +267,32 @@ void LCD_floatToString(float data, uint8 percision) {
     LCD_intgerToString(left);
     LCD_displayCharacter('.');
     LCD_intgerToString(right);
-
 }
 
+/**
+ * @brief Clear the LCD screen.
+ */
 void LCD_clearScreen(void) {
     LCD_sendCommand(LCD_COMMAND_CLEAR);
 }
 
+/**
+ * @brief Show the cursor on the LCD.
+ */
 void LCD_showCursor(void) {
     LCD_sendCommand(LCD_COMMAND_CURSOR_BLINKING);
 }
 
-void LCD_dispalyOff() {
+/**
+ * @brief Turn off the LCD.
+ */
+void LCD_dispalyOff(void) {
     LCD_sendCommand(LCD_COMMAND_DISPLAY_OFF);
 }
 
-void LCD_dispalyOn() {
+/**
+ * @brief Turn on the LCD.
+ */
+void LCD_dispalyOn(void) {
     LCD_sendCommand(LCD_COMMAND_DISPLAY_ON);
 }
