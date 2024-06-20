@@ -17,7 +17,7 @@
 #define ATMEGA32_DRIVERS_TIMER0_H_
 
 #include "../../../std_types.h"
-
+#include "../../../common_macros.h"
 /**
  * @brief THE REGISTERRS USED BY TIMER0 and there address
  *
@@ -210,9 +210,10 @@ typedef void (*TimerFunctionCallback)(Timer0Callback);
 
 
 typedef void (*TimerFunctionMode)(TIMER0_MODE);
-typedef void (*TimerFunctionCLK)(TIMER0_CLK );
-typedef void (*TimerFunctionOC0)(TIMER0_OC0_Control );
 
+typedef void (*TimerFunctionCLK)(TIMER0_CLK);
+
+typedef void (*TimerFunctionOC0)(TIMER0_OC0_Control);
 
 
 typedef struct {
