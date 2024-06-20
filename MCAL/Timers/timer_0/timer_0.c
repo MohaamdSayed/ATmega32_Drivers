@@ -74,41 +74,6 @@ void SetMode(TIMER0_MODE mode) {
     TIFR |= 3; /** Clear interrupt Flags */
 }
 
-//
-//static void TIMER0_init(TIMER0_Config *config) {
-//
-//    switch (config->mode) {
-//        /**initialize timer 0 in normal mode and disconnect OC0 by default*/
-//        case TIMER0_MODE_NORMAL:
-//            /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
-//            /** TCCR0 -> 1 	  | 0 	  | 0 	  | 0 	  | 0 	  | CS02 | CS01 | CS00 */
-//            TCCR0 |= (1 << FOC0);
-//            break;
-//        case TIMER0_MODE_CTC:
-//            /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
-//            /** TCCR0 -> 1 	  | 0 	  | 0 	  | 0 	  | 1 	  | CS02 | CS01 | CS00 */
-//            TCCR0 = 0b1000100;
-//
-//            break;
-//        case TIMER0_MODE_FAST_PWM:
-//            /** TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
-//            /** TCCR0 -> 0 	  | 1 	  | 0 	  |  0	  | 1 	  | CS02 | CS01 | CS00 */
-//            TCCR0 = 0b01001000;
-//            break;
-//        case TIMER0_MODE_PWM_PHASE_CORRECT:
-//            /**TCCR0 -> FOC0 | WGM00 | COM01 | COM00 | WGM01 | CS02 | CS01 | CS00 */
-//            /** TCCR0 -> 0 	 | 1 	 | 0 	 |  0	 | 0 	 | CS02 | CS01 | CS00 */
-//            TCCR0 = 0b01000000;
-//            break;
-//        default:
-//            break;
-//    }
-//
-//    set_Clock(config->clock);
-//    OC0_control(config->OC0);
-//    TIFR |= 3; /** Clear interrupt Flags */
-//}
-
 /**
  * @brief this function is used to stop the timer from counting without changing any settings.
  *
@@ -278,14 +243,7 @@ void TIMER0_COMP_ISR(void) {
     if (compare_match_callback != NULL_PTR) {
         compare_match_callback();
     }
-
-
 }
-
-
-
-
-
 
 /**
  * @brief call the ISR function with the given Callback.
