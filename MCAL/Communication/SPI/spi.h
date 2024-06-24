@@ -21,7 +21,6 @@
 #include "../../../std_types.h"
 #include "../../../common_macros.h"
 
-
 /**
  @brief Here you can find all the the information related to the Timer0
  hardware found in the official data sheet.
@@ -54,13 +53,13 @@
  MSTR -> 1 to Configure SPI as MASTER .
  MSTR -> 0 to Configure SPI as SLAVE .
  MSTR -> If SS is configured as an input and is driven low while MSTR is set, MSTR will be cleared,
-         and SPIF in SPSR will become set,The user will then have to set MSTR to re-enable SPI Master mode.
+ and SPIF in SPSR will become set,The user will then have to set MSTR to re-enable SPI Master mode.
 
  CPOL: -> Clock Polarity
  CPOL -> 0 to make the leading edge : RISING.
  CPOL -> 1 to make the leading edge : Falling.
  CPOL -> When this bit is written to one, SCK is high when idle. When CPOL is written to zero, SCK is low
-        when idle.
+ when idle.
 
  CPHA:: -> Clock Phase
  CPHA: -> 0 to make data sampled on : LEADING .
@@ -72,7 +71,7 @@
  SPR1:0 -> These two bits control the SCK rate of the device configured as a Master.
  SPR1:0 -> have no effect on the Slave.
 
-  -----------------------------------------------
+ -----------------------------------------------
  SPI2X	|	 SPR1	|	SPR0   |	Description	|
  -----------------------------------------------
  0		|	  0		|	 0	   |	fosc/4 	    |
@@ -110,13 +109,11 @@
  SPDR -> 8-bit value of the SPI data register used for read / write
  writing value to the SPDR will initiate Transmit.
 
-*/
+ */
 
-
-
-#define  SPCR (*(volatile uint8_t *)((0x0D) + 0x20))
-#define  SPSR (*(volatile uint8_t *)((0x0E) + 0x20))
-#define  SPDR (*(volatile uint8_t *)((0x0F) + 0x20))
+//#define  SPCR (*(volatile uint8 *)((0x0D) + 0x20))
+//#define  SPSR (*(volatile uint8 *)((0x0E) + 0x20))
+//#define  SPDR (*(volatile uint8 *)((0x0F) + 0x20))
 
 typedef enum {
     SPI_FCPU_4,
@@ -129,8 +126,7 @@ typedef enum {
 } SPI_Master_Freq;
 
 typedef enum {
-    SPI_MSB,
-    SPI_LSB,
+    SPI_MSB, SPI_LSB,
 } SPI_Data_Order;
 
 void initMaster();
@@ -143,9 +139,8 @@ void initSlave();
 
 uint8 sendReceiveByte(uint8);
 
-void sendString(const uint8 *);
+void sendString(const uint8*);
 
-void receiveString(uint8 *);
-
+void receiveString(uint8*);
 
 #endif //ATMEGA32_DRIVERS_SPI_H
