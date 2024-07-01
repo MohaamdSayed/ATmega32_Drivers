@@ -223,10 +223,10 @@ typedef struct {
     TimerFunctionCLK clk;
     TimerFunctionOC0 OC0;
 
-} Config;
+} Timer0_Config;
 
 typedef struct {
-    Config init;
+    Timer0_Config init;
     TimerFunction stop;
     TimerFunction start;
     TimerFunctionUint8 setStart;

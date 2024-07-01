@@ -16,8 +16,8 @@
 
 
 static uint8 selectedClk;
-Timer0Callback overflow_callback = NULL_PTR;
-Timer0Callback compare_match_callback = NULL_PTR;
+Timer0Callback TIMER0_overflow_callback = NULL_PTR;
+Timer0Callback TIMER0_compare_match_callback = NULL_PTR;
 
 /**
  * @briefs this function set the proper clock setting to the timer module.
@@ -213,10 +213,10 @@ static void TIMER0_set_ISR_callback(TIMER0_interrupt_type interrupt,
                                     Timer0Callback callback) {
     switch (interrupt) {
         case TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH:
-            compare_match_callback = callback;
+        	TIMER0_overflow_callback = callback;
             break;
         case TIMER0_INTERRUPT_OVERFLOW:
-            overflow_callback = callback;
+            TIMER0_overflow_callback = callback;
             break;
     }
 }
@@ -240,8 +240,8 @@ void setCTCCallback(Timer0Callback callback) {
 void TIMER0_COMP_ISR(void)__attribute__((signal, used, externally_visible));
 
 void TIMER0_COMP_ISR(void) {
-    if (compare_match_callback != NULL_PTR) {
-        compare_match_callback();
+    if (TIMER0_overflow_callback != NULL_PTR) {
+    	TIMER0_overflow_callback();
     }
 }
 
@@ -254,8 +254,8 @@ void TIMER0_COMP_ISR(void) {
 void TIMER0_OVF_ISR(void)__attribute__((signal, used, externally_visible));
 
 void TIMER0_OVF_ISR(void) {
-    if (overflow_callback != NULL_PTR) {
-        overflow_callback();
+    if (TIMER0_overflow_callback != NULL_PTR) {
+        TIMER0_overflow_callback();
     }
 }
 
