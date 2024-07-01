@@ -18,17 +18,12 @@
 
 #include "../../../std_types.h"
 #include "../../../common_macros.h"
+#include "../../Atmega32_Registers.h"
 /**
  * @brief THE REGISTERRS USED BY TIMER0 and there address
  *
  */
 
-
-#define TCCR0 (*(volatile uint8 *)((0x33) + 0x20))
-#define TCNT0 (*(volatile uint8 *)((0x32) + 0x20))
-#define OCR0 (*(volatile uint8 *)((0x3C) + 0x20))
-#define TIMSK (*(volatile uint8 *)((0x39) + 0x20))
-#define TIFR (*(volatile uint8 *)((0x38) + 0x20))
 
 /**
  @brief Here you can find all the the information related to the Timer0
@@ -144,10 +139,10 @@
  *
  */
 typedef enum {
-    TIMER0_MODE_NORMAL, /**< TIMER0_MODE_NORMAL */
-    TIMER0_MODE_PWM_PHASE_CORRECT,/**< TIMER0_MODE_PWM_PHASE_CORRECT */
-    TIMER0_MODE_CTC, /**< TIMER0_MODE_CTC */
-    TIMER0_MODE_FAST_PWM, /**< TIMER0_MODE_FAST_PWM */
+	TIMER0_MODE_NORMAL, /**< TIMER0_MODE_NORMAL */
+	TIMER0_MODE_PWM_PHASE_CORRECT,/**< TIMER0_MODE_PWM_PHASE_CORRECT */
+	TIMER0_MODE_CTC, /**< TIMER0_MODE_CTC */
+	TIMER0_MODE_FAST_PWM, /**< TIMER0_MODE_FAST_PWM */
 } TIMER0_MODE;
 
 /**
@@ -155,14 +150,14 @@ typedef enum {
  *
  */
 typedef enum {
-    TIMER0_CLK_NO_CLOCK, /**< TIMER0_CLK_NO_CLOCK */
-    TIMER0_CLK_SYSTEM, /**< TIMER0_CLK_SYSTEM */
-    TIMER0_CLK_SYSTEM_8, /**< TIMER0_CLK_SYSTEM_8 */
-    TIMER0_CLK_SYSTEM_64, /**< TIMER0_CLK_SYSTEM_64 */
-    TIMER0_CLK_SYSTEM_265, /**< TIMER0_CLK_SYSTEM_265 */
-    TIMER0_CLK_SYSTEM_1024, /**< TIMER0_CLK_SYSTEM_1024 */
-    TIMER0_CLK_SYSTEM_EXTERNAL_FALING,/**< TIMER0_CLK_SYSTEM_EXTERNAL_FALING */
-    TIMER0_CLK_SYSTEM_EXTERNAL_RISING, /**< TIMER0_CLK_SYSTEM_EXTERNAL_RISING */
+	TIMER0_CLK_NO_CLOCK, /**< TIMER0_CLK_NO_CLOCK */
+	TIMER0_CLK_SYSTEM, /**< TIMER0_CLK_SYSTEM */
+	TIMER0_CLK_SYSTEM_8, /**< TIMER0_CLK_SYSTEM_8 */
+	TIMER0_CLK_SYSTEM_64, /**< TIMER0_CLK_SYSTEM_64 */
+	TIMER0_CLK_SYSTEM_265, /**< TIMER0_CLK_SYSTEM_265 */
+	TIMER0_CLK_SYSTEM_1024, /**< TIMER0_CLK_SYSTEM_1024 */
+	TIMER0_CLK_SYSTEM_EXTERNAL_FALING,/**< TIMER0_CLK_SYSTEM_EXTERNAL_FALING */
+	TIMER0_CLK_SYSTEM_EXTERNAL_RISING, /**< TIMER0_CLK_SYSTEM_EXTERNAL_RISING */
 } TIMER0_CLK;
 
 /**
@@ -170,10 +165,10 @@ typedef enum {
  *
  */
 typedef enum {
-    TIMER0_OC0_DISCONNECTED = 0, /**< TIMER0_OC0_DISCONNECTED */
-    TIMER0_OC0_TOGGLE = 1, /**< TIMER0_OC0_TOGGLE */
-    TIMER0_OC0_CLEAR = 2, /**< TIMER0_OC0_CLEAR */
-    TIMER0_OC0_SET = 3, /**< TIMER0_OC0_SET */
+	TIMER0_OC0_DISCONNECTED = 0, /**< TIMER0_OC0_DISCONNECTED */
+	TIMER0_OC0_TOGGLE = 1, /**< TIMER0_OC0_TOGGLE */
+	TIMER0_OC0_CLEAR = 2, /**< TIMER0_OC0_CLEAR */
+	TIMER0_OC0_SET = 3, /**< TIMER0_OC0_SET */
 
 } TIMER0_OC0_Control;
 
@@ -182,7 +177,7 @@ typedef enum {
  *
  */
 typedef enum {
-    TIMER0_INTERRUPT_OVERFLOW, TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH
+	TIMER0_INTERRUPT_OVERFLOW, TIMER0_INTERRUPT_OUTPUT_COMPARE_MATCH
 
 } TIMER0_interrupt_type;
 
@@ -191,9 +186,9 @@ typedef enum {
  *
  */
 typedef struct {
-    TIMER0_MODE mode;
-    TIMER0_CLK clock;
-    TIMER0_OC0_Control OC0;
+	TIMER0_MODE mode;
+	TIMER0_CLK clock;
+	TIMER0_OC0_Control OC0;
 } TIMER0_Config;
 
 /**
@@ -210,39 +205,36 @@ typedef void (*TimerFunctionUint8)(uint8);
 
 typedef void (*TimerFunctionCallback)(Timer0Callback);
 
-
 typedef void (*TimerFunctionMode)(TIMER0_MODE);
 
 typedef void (*TimerFunctionCLK)(TIMER0_CLK);
 
 typedef void (*TimerFunctionOC0)(TIMER0_OC0_Control);
 
-
 typedef struct {
-    TimerFunctionMode mode;
-    TimerFunctionCLK clk;
-    TimerFunctionOC0 OC0;
+	TimerFunctionMode mode;
+	TimerFunctionCLK clk;
+	TimerFunctionOC0 OC0;
 
 } Timer0_Config;
 
 typedef struct {
-    Timer0_Config init;
-    TimerFunction stop;
-    TimerFunction start;
-    TimerFunctionUint8 setStart;
-    uint8TimerFunction getTicks;
-    TimerFunctionUint8 setCompare;
-    TimerFunction enableOverFlowInterrupt;
-    TimerFunction enableCTCInterrupt;
-    TimerFunction disableOverFlowInterrupt;
-    TimerFunction disableCTCInterrupt;
-    uint8TimerFunction getOverFlowFlag;
-    uint8TimerFunction getCTCFlag;
-    TimerFunctionCallback setOverFlowCallback;
-    TimerFunctionCallback setCTCCallback;
+	Timer0_Config init;
+	TimerFunction stop;
+	TimerFunction start;
+	TimerFunctionUint8 setStart;
+	uint8TimerFunction getTicks;
+	TimerFunctionUint8 setCompare;
+	TimerFunction enableOverFlowInterrupt;
+	TimerFunction enableCTCInterrupt;
+	TimerFunction disableOverFlowInterrupt;
+	TimerFunction disableCTCInterrupt;
+	uint8TimerFunction getOverFlowFlag;
+	uint8TimerFunction getCTCFlag;
+	TimerFunctionCallback setOverFlowCallback;
+	TimerFunctionCallback setCTCCallback;
 
 } TIMER0;
-
 
 /**
  * @brief function prototypes for
@@ -256,7 +248,6 @@ void OC0_control(TIMER0_OC0_Control OC0);
 void SetMode(TIMER0_MODE);
 
 #define TIMER0SETTINGS() {SetMode,set_Clock,OC0_control}
-
 
 //void TIMER0_init(TIMER0_Config *);
 
@@ -286,8 +277,6 @@ void setOverFlowCallback(Timer0Callback);
 
 void setCTCCallback(Timer0Callback);
 
-
 #define NEWTIMER0() {TIMER0SETTINGS(),TIMER0_stop,TIMER0_start,TIMER0_setStart,TIMER0_getTicks,TIMER0_set_compare_value,enableOverFlowInterrupt,enableCTCInterrupt,disableOverFlowInterrupt,disableCTCInterrupt,getOverFlowFlag,getCTCFlag,setOverFlowCallback,setCTCCallback}
-
 
 #endif /* ATMEGA32_DRIVERS_TIMER0_H_ */

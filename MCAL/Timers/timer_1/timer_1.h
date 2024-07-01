@@ -18,7 +18,7 @@
 
 #include "../../../std_types.h"
 #include "../../../common_macros.h"
-#include "../../../../avr/io.h"
+#include "../../Atmega32_Registers.h"
 
 /**
  @brief Here you can find all the the information related to the Timer0
@@ -47,7 +47,7 @@
  // -> Note to set/drive Power using OC1 you need to set the DDR (data direction Register)
 
  this Table Work With mode NORMAL / CTC
-  -----------------------------------------------------------------------------------
+ -----------------------------------------------------------------------------------
  COM1A1/COM1B1	|  COM1A0/COM1B0	|	Description									|
  ------------------------------------------------------------------------------------
  0		        |	  0	    	    |	Normal port operation OC0 disconnected		|
@@ -74,10 +74,8 @@ typedef enum {
 } TIMER1_OC1B_Control;
 
 typedef enum {
-    TIMER1_MODE_NORMAL = 0,
-    TIMER1_MODE_CTC = 4
+    TIMER1_MODE_NORMAL = 0, TIMER1_MODE_CTC = 4
 } TIMER1_MODE;
-
 
 typedef enum {
     TIMER1_CLK_NO_CLOCK, /**< TIMER0_CLK_NO_CLOCK */
@@ -89,7 +87,6 @@ typedef enum {
     TIMER1_CLK_SYSTEM_EXTERNAL_FALING,/**< TIMER0_CLK_SYSTEM_EXTERNAL_FALING */
     TIMER1_CLK_SYSTEM_EXTERNAL_RISING, /**< TIMER0_CLK_SYSTEM_EXTERNAL_RISING */
 } TIMER1_CLK;
-
 
 typedef enum {
     TIMER1_INTERRUPT_OVERFLOW,
@@ -118,7 +115,6 @@ void TIMER1_set_compare_value_A(uint16 compValue);
 
 void TIMER1_set_compare_value_B(uint16 compValue);
 
-
 void TIMER1_enableOverFlowInterrupt(void);
 
 void TIMER1_enable_CTC_A_Interrupt(void);
@@ -142,6 +138,5 @@ void TIMER1_set_OverFlow_Callback(Timer1Callback);
 void TIMER1_set_CTC_A_Callback(Timer1Callback);
 
 void TIMER1_set_CTC_B_Callback(Timer1Callback);
-
 
 #endif /* ATMEGA32_DRIVERS_TIMER_1_H_ */
