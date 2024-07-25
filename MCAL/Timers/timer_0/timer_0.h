@@ -24,7 +24,6 @@
  *
  */
 
-
 /**
  @brief Here you can find all the the information related to the Timer0
  hardware found in the official data sheet.
@@ -197,42 +196,28 @@ typedef struct {
  */
 typedef void (*Timer0Callback)(void);
 
-typedef void (*TimerFunction)(void);
-
-typedef uint8 (*uint8TimerFunction)(void);
-
-typedef void (*TimerFunctionUint8)(uint8);
-
-typedef void (*TimerFunctionCallback)(Timer0Callback);
-
-typedef void (*TimerFunctionMode)(TIMER0_MODE);
-
-typedef void (*TimerFunctionCLK)(TIMER0_CLK);
-
-typedef void (*TimerFunctionOC0)(TIMER0_OC0_Control);
-
 typedef struct {
-	TimerFunctionMode mode;
-	TimerFunctionCLK clk;
-	TimerFunctionOC0 OC0;
+	void (*mode)(TIMER0_MODE);
+	void (*clk)(TIMER0_CLK);
+	void (*OC0)(TIMER0_OC0_Control);
 
 } Timer0_Config;
 
 typedef struct {
 	Timer0_Config init;
-	TimerFunction stop;
-	TimerFunction start;
-	TimerFunctionUint8 setStart;
-	uint8TimerFunction getTicks;
-	TimerFunctionUint8 setCompare;
-	TimerFunction enableOverFlowInterrupt;
-	TimerFunction enableCTCInterrupt;
-	TimerFunction disableOverFlowInterrupt;
-	TimerFunction disableCTCInterrupt;
-	uint8TimerFunction getOverFlowFlag;
-	uint8TimerFunction getCTCFlag;
-	TimerFunctionCallback setOverFlowCallback;
-	TimerFunctionCallback setCTCCallback;
+	void (*stop)();
+	void (*start)();
+	void (*setStart)(uint8);
+	uint8 (*getTicks)();
+	void (*setCompare)(uint8);
+	void (*enableOverFlowInterrupt)();
+	void (*enableCTCInterrupt)();
+	void (*disableOverFlowInterrupt)();
+	void (*disableCTCInterrupt)();
+	uint8 (*getOverFlowFlag)();
+	uint8 (*getCTCFlag)();
+	void (*setOverFlowCallback)(Timer0Callback);
+	void (*setCTCCallback)(Timer0Callback);
 
 } TIMER0;
 

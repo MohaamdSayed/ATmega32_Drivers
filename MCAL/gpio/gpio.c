@@ -119,6 +119,7 @@ void GPIO_writePin(uint8 pin_num, uint8 value) {
  * Read and return the value for the required pin, it should be Logic High or Logic Low.
  * If the input port number or pin number are not correct, The function will return Logic Low.
  */
+
 uint8 GPIO_readPin(uint8 pin_num) {
 
 	/*
