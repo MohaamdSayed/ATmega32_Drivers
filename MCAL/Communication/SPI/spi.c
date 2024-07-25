@@ -15,7 +15,7 @@
  */
 
 #include "spi.h"
-#include "avr/io.h"
+#include "../../Atmega32_Registers.h"
 #include "..\..\..\common_macros.h" /* To use the macros like SET_BIT */
 
 void initMaster() {
@@ -45,7 +45,7 @@ void initSlave() {
 
 uint8 sendReceiveByte(uint8 byte) {
     SPDR = byte;
-    while (BIT_IS_CLEAR(SPCR, SPIF));
+    while (BIT_IS_CLEAR(SPCR, 7)); //SPIF PIN 7
     return SPDR;
 }
 
