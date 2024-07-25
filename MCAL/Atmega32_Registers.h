@@ -125,4 +125,14 @@
 #define UMSEL 6
 #define URSEL 7
 
+
+//TWCR
+#define TWIE 0
+//#define UCSZ0 1
+#define TWEN 2
+#define TWWC 3
+#define TWSTO 4
+#define TWSTA 5
+#define TWEA 6
+#define TWINT 7
 #endif //ATMEGA32_ETAMINI_ATMEGA32_REGISTERS_H
